@@ -10,13 +10,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ChatServer {
 
-    private static int port;
+    public static int port;
     private static final String LOG_FILE = "file.log";
     private static final String SETTINGS_FILE = "settings.txt";
     static Set<ClientHandler> clientHandlers = ConcurrentHashMap.newKeySet();
 
 
     public static void main(String[] args) {
+        System.out.println("Сервер стартовал");
 
         loadSettings();
 

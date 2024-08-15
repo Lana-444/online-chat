@@ -55,17 +55,52 @@ public class ClientHandler implements Runnable {
     }
 
     private void cleanup() {
+        IOException exception = null;
+
         try {
-            reader.close();
-            writer.close();
-            socket.close();
-            ChatServer.clientHandlers.remove(this);
+            if (reader != null) {
+                reader.close();
+            }
         } catch (IOException e) {
+            exception = e;
             e.printStackTrace();
+        } finally {
+            reader = null;
+        }
+
+        try {
+            if (writer != null) {
+                writer.close();
+            }
+        } finally {
+            writer = null;
+        }
+
+        try {
+            if (socket != null) {
+                socket.close();
+            }
+        } catch (IOException e) {
+            if (exception == null) {
+                exception = e;
+            }
+            e.printStackTrace();
+        } finally {
+            socket = null;
+        }
+
+
+        ChatServer.clientHandlers.remove(this);
+
+
+        if (exception != null) {
+            throw new RuntimeException("Во время очистки произошла ошибка", exception);
         }
     }
 
 }
+
+
 
 
 
